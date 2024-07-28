@@ -1,0 +1,9 @@
+(undo-tree-save-format-version . 1)
+"e7496b2efacea1aa6c75547fa6c923515c4a338e"
+[nil nil nil nil (26278 34318 718612 353000) 0 nil]
+([nil nil ((#("void load_music();
+" 0 3 (face font-lock-type-face fontified t) 3 4 (face font-lock-type-face c-type c-decl-id-start fontified t) 4 5 (fontified t) 5 15 (face font-lock-function-name-face fontified t) 15 19 (fontified t)) . 1881) (undo-tree-id0 . -10) (undo-tree-id1 . -10) (undo-tree-id2 . -12) (undo-tree-id3 . -12) (undo-tree-id4 . -12) (undo-tree-id5 . -12) (undo-tree-id6 . -13) (undo-tree-id7 . -13) (undo-tree-id8 . -13) (undo-tree-id9 . -13) (undo-tree-id10 . -14) (undo-tree-id11 . -14) (undo-tree-id12 . -14) (undo-tree-id13 . -14) (undo-tree-id14 . -15) (undo-tree-id15 . -15) (undo-tree-id16 . -15) (undo-tree-id17 . -15) (undo-tree-id18 . -10) (undo-tree-id19 . -10) (undo-tree-id20 . -10) (undo-tree-id21 . -10) (undo-tree-id22 . -10) (undo-tree-id23 . -10) (undo-tree-id24 . -10) (undo-tree-id25 . -10) (undo-tree-id26 . -10) (undo-tree-id27 . -19) (undo-tree-id28 . -18) 1891 (t 26278 9854 168562 132000)) nil (26278 34318 718606 696000) 0 nil])
+([nil nil ((1516 . 1526) (t 26278 34318 733096 556000)) nil (26278 34326 239473 696000) 0 nil])
+([nil nil ((#(" memory" 0 7 (face font-lock-comment-face fontified t)) . 1530) (undo-tree-id29 . -6) (undo-tree-id30 . -4) 1534 (t 26278 34326 245220 722000)) nil (26278 34329 72607 579000) 0 nil])
+([nil current ((1530 . 1534)) nil (26278 34329 72593 680000) 0 nil])
+nil

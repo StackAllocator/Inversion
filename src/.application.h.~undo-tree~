@@ -1,0 +1,14 @@
+(undo-tree-save-format-version . 1)
+"2e67b1a2f322cd24eafc5048af286930ef908c42"
+[nil nil nil nil (26274 36924 320843 910000) 0 nil]
+([nil nil ((659 . 663) (t 26269 266 398953 672000)) nil (26274 36924 320838 672000) 0 nil])
+([nil nil ((#("constexpr " 0 1 (face font-lock-keyword-face c-is-sws t fontified t) 1 5 (face font-lock-keyword-face fontified t) 5 6 (face font-lock-keyword-face fontified t) 6 7 (face font-lock-keyword-face fontified t) 7 8 (face font-lock-keyword-face fontified t) 8 9 (face font-lock-keyword-face fontified t) 9 10 (fontified t)) . 654) (undo-tree-id0 . -9) (undo-tree-id1 . 1) (undo-tree-id2 . -8) (undo-tree-id3 . -6) (undo-tree-id4 . -8) (undo-tree-id5 . -8) (undo-tree-id6 . -8) (undo-tree-id7 . -8) (undo-tree-id8 . -8) (undo-tree-id9 . -8) (undo-tree-id10 . -7) (undo-tree-id11 . -6) (undo-tree-id12 . -6) (undo-tree-id13 . -6) (undo-tree-id14 . -6) (undo-tree-id15 . -10) 660 (t 26274 36924 323392 510000)) nil (26274 36926 539027 202000) 0 nil])
+([nil nil ((654 . 660)) nil (26274 36926 538978 103000) 0 nil])
+([nil nil ((#("#include \"./game.h\"
+" 0 1 (face font-lock-preprocessor-face c-is-sws t c-in-sws t fontified t) 1 8 (face font-lock-preprocessor-face c-in-sws t fontified t) 8 9 (c-in-sws t fontified t) 9 19 (face font-lock-string-face c-in-sws t fontified t) 19 20 (c-in-sws t fontified t)) . 345) (undo-tree-id22 . -19) (undo-tree-id23 . -19) (t 26274 36926 551422 599000)) nil (26274 36964 329785 137000) 0 nil])
+([nil nil ((nil rear-nonsticky nil 364 . 365) (#("
+" 0 1 (fontified nil c-in-sws t)) . -384) (364 . 385) 345) nil (26274 36964 329781 296000) 0 nil])
+([nil nil ((#("
+" 0 1 (c-in-sws t c-is-sws t fontified t)) . 344) (undo-tree-id16 . -1) (undo-tree-id17 . -1) (undo-tree-id18 . -1) (undo-tree-id19 . -1) (undo-tree-id20 . -1) (undo-tree-id21 . -1)) nil (26274 36964 329778 921000) 0 nil])
+([nil current ((364 . 365)) nil (26274 36964 329763 696000) 0 nil])
+nil

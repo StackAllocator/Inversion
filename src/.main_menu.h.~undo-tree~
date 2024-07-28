@@ -1,0 +1,10 @@
+(undo-tree-save-format-version . 1)
+"ba8a918aac4cb65c2426dfcb2ef63acac0a500f2"
+[nil nil nil nil (26278 24359 608712 813000) 0 nil]
+([nil nil ((#("  Level *m_Level;
+
+" 0 2 (fontified t) 2 6 (face font-lock-type-face fontified t) 6 7 (face font-lock-type-face c-type c-decl-id-start fontified t) 7 8 (fontified t) 8 9 (prettify-symbols-end 2507 prettify-symbols-start 2506 composition (4 1 [32 65 57711]) fontified t) 9 16 (face font-lock-variable-name-face fontified t) 16 19 (fontified t)) . 2498) (undo-tree-id4 . -18) (undo-tree-id5 . -18) (undo-tree-id6 . -18) (undo-tree-id7 . -18) (undo-tree-id8 . -18) (undo-tree-id9 . -18) (undo-tree-id10 . -18) (undo-tree-id11 . -18) (undo-tree-id12 . -18) (undo-tree-id13 . -18) (undo-tree-id14 . -19) 2516 (t 26278 20434 336493 451000)) nil (26278 24359 608708 413000) 0 nil])
+([nil nil ((nil rear-nonsticky nil 2608 . 2609) (#("
+" 0 1 (fontified nil)) . -2625) (2606 . 2626) 2578) nil (26278 24359 608692 279000) 0 nil])
+([nil current ((#("  " 0 2 (fontified t)) . -2607) (undo-tree-id0 . -2) (undo-tree-id1 . -2) (undo-tree-id2 . -2) (undo-tree-id3 . -2) 2609 (2607 . 2609) (2607 . 2608) 2609) nil (26278 24359 608684 178000) 0 nil])
+nil
