@@ -14,33 +14,17 @@
 
 #include "./game.h"
 
-namespace Inversion {
-// ----------------------------------------------------------------------------------------------------
-// Specifies important properties of the application.
-struct ApplicationSpecification {
-  // Specify screen width and height of the window.
-  const int screen_width = 1920;
-  const int screen_height = 1080;
-
-  // Specify the window title.
-  std::string title = "Inversion";
-};
-
+namespace Inversion::Application {
 // ----------------------------------------------------------------------------------------------------
 // Handles the entire application.
-class Application {
-public:
   // Run the entire application.
+
+  void init();
+
   void run();
 
   // This function is for cleanup. Closes window and OpenGL context.
-  void cleanup() const;
-
-private:
-  // Instance of the application specification that specifies window properties.
-  ApplicationSpecification m_Specification;
-
-  Game m_Game;
+  void cleanup();
 
   // Code of the loop function is executed every frame.
   void Loop();
@@ -50,5 +34,4 @@ private:
 
   // Render the current game loop.
   void OnRender();
-};
-} // namespace Inversion
+} // namespace Inversion::Application

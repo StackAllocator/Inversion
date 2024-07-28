@@ -7,22 +7,39 @@
 // Copyright (C) 2024
 // Author: Johannes Elsing <je305@students.uni-freiburg.de>
 
+#include <iostream>
+
 #include "raylib.h"
 
 #include "./application.h"
 #include "./asset_manager.h"
 #include "./game.h"
 
-namespace Inversion {
-void Application::run() {
-  // ----------------------------------------------------------------------------------------------------
-  // Initialize the game.
-  // ----------------------------------------------------------------------------------------------------
+namespace Inversion::Application {
+// ----------------------------------------------------------------------------------------------------
+// Specifies important properties of the application.
+struct ApplicationSpecification {
+  // Specify screen width and height of the window.
+  const int screen_width = 1920;
+  const int screen_height = 1080;
+
+  // Specify the window title.
+  std::string title = "Inversion";
+};
+
+// Define instances of the game for the application handle.
+static ApplicationSpecification specification;
+static Game game;
+
+// ----------------------------------------------------------------------------------------------------
+// Initialize the game.
+// ----------------------------------------------------------------------------------------------------
+void init() {
   // Make window resizable and enable anti-aliasing.
   SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
 
-  InitWindow(m_Specification.screen_width, m_Specification.screen_height,
-             m_Specification.title.c_str());
+  InitWindow(specification.screen_width, specification.screen_height,
+             specification.title.c_str());
 
   InitAudioDevice();
 
@@ -43,38 +60,41 @@ void Application::run() {
   AssetManager::load_sounds();
   AssetManager::load_fonts();
 
-  m_Game.init_game();
+  game.init_game();
+}
+
+void run() {
   // ----------------------------------------------------------------------------------------------------
   // Main game loop.
   // ----------------------------------------------------------------------------------------------------
-  while (!WindowShouldClose() && !m_Game.m_Quit) {
+  while (!WindowShouldClose() && !game.m_Quit) {
     Loop();
   }
   cleanup();
 }
 
 // ----------------------------------------------------------------------------------------------------
-void Application::Loop() {
+void Loop() {
   OnUpdate();
   OnRender();
 }
 
 // ----------------------------------------------------------------------------------------------------
-void Application::OnUpdate() { m_Game.update_game(); }
+void OnUpdate() { game.update_game(); }
 
-void Application::OnRender() {
+void OnRender() {
   // ----------------------------------------------------------------------------------------------------
   // Draw
   BeginDrawing();
   ClearBackground(BLACK);
 
-  m_Game.draw_game();
+  game.draw_game();
 
   EndDrawing();
   // ----------------------------------------------------------------------------------------------------
 }
 
-void Application::cleanup() const {
+void cleanup() {
   // De-Initialization
   // ----------------------------------------------------------------------------------------------------
   AssetManager::unload_textures(); // Unload loaded data (textures)
@@ -87,4 +107,4 @@ void Application::cleanup() const {
   CloseWindow();      // Close window and OpenGL context
   // ----------------------------------------------------------------------------------------------------
 }
-} // namespace Inversion
+} // namespace Inversion::Application

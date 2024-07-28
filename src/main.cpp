@@ -10,6 +10,7 @@
 #include "./application.h"
 
 int main() {
-  Inversion::Application app;
-  app.run();
+  Inversion::Application::init();
+  Inversion::Application::run();
+  Inversion::Application::cleanup();
 }
