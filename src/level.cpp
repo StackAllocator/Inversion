@@ -52,8 +52,6 @@ void load_and_extract(const std::string &path, Inversion::TileMapping &level) {
 
   int tilesetwidth =
       static_cast<int>(level_data["tilesets"][0]["imagewidth"]) / tile_width;
-  int tilesetheight =
-      static_cast<int>(level_data["tilesets"][0]["imageheight"]) / tile_height;
 
   int width = level_data["layers"][0]["width"];
   int height = level_data["layers"][0]["height"];
@@ -103,7 +101,7 @@ void load_and_extract(const std::string &path, Inversion::TileMapping &level) {
       float dest_y = static_cast<float>(row * screen_tile_height);
 
       if (flipped_diagonally) {
-	// Translate tiles to according to a diagonal flip.
+        // Translate tiles to according to a diagonal flip.
         rotation = 90.f;
         curr_tile_width *= -1;
         dest_x += screen_tile_width;
@@ -133,21 +131,22 @@ void Level::set_texture() {
   this->tileset = Inversion::AssetManager::get_texture("tileset");
 }
 
-  void draw(TileMapping level, Texture2D tileset, Rectangle flag_pos, bool flipped) {
+void draw(TileMapping level, Texture2D tileset, Rectangle flag_pos,
+          bool flipped) {
   for (size_t i = 0; i < level.coords.size(); ++i) {
-    DrawTexturePro(tileset,
-		   {level.coords[i].x, level.coords[i].y,
-		    level.width[i], level.height[i]},
-		   {level.rects[i].x, level.rects[i].y,
-		    level.rects[i].width, level.rects[i].height},
-		   {0, 0}, level.rotation[i], WHITE);
+    DrawTexturePro(
+        tileset,
+        {level.coords[i].x, level.coords[i].y, level.width[i], level.height[i]},
+        {level.rects[i].x, level.rects[i].y, level.rects[i].width,
+         level.rects[i].height},
+        {0, 0}, level.rotation[i], WHITE);
   }
   int rotation = 0;
   if (flipped) {
     rotation += 180;
   }
   DrawTexturePro(Inversion::AssetManager::get_texture("flag"), {0, 0, 16, 16},
-		 flag_pos, {0, 0}, rotation, WHITE);
+                 flag_pos, {0, 0}, rotation, WHITE);
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -167,7 +166,7 @@ void Level::draw_level() {
   } else if (m_Id == 3) {
 
     DrawTexturePro(Inversion::AssetManager::get_texture("flag"), {0, 0, 16, 16},
-		   {1700, 532, 64, 64}, {0, 0}, 0, WHITE);
+                   {1700, 532, 64, 64}, {0, 0}, 0, WHITE);
   }
 }
 } // namespace Inversion

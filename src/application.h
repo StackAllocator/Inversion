@@ -17,21 +17,21 @@
 namespace Inversion::Application {
 // ----------------------------------------------------------------------------------------------------
 // Handles the entire application.
-  // Run the entire application.
+// Run the entire application.
 
-  void init();
+void init();
 
-  void run();
+void run();
 
-  // This function is for cleanup. Closes window and OpenGL context.
-  void cleanup();
+// This function is for cleanup. Closes window and OpenGL context.
+void cleanup();
 
-  // Code of the loop function is executed every frame.
-  void Loop();
+// Code of the loop function is executed every frame.
+void Loop();
 
-  // Update the game loop.
-  void OnUpdate();
+// Update the game loop.
+void OnUpdate();
 
-  // Render the current game loop.
-  void OnRender();
+// Render the current game loop.
+void OnRender();
 } // namespace Inversion::Application

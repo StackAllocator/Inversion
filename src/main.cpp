@@ -10,7 +10,11 @@
 #include "./application.h"
 
 int main() {
+
   Inversion::Application::init();
   Inversion::Application::run();
+
   Inversion::Application::cleanup();
+
+  return 0;
 }

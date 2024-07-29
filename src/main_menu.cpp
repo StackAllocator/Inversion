@@ -117,13 +117,6 @@ void MainMenu::update_balls() {
 LevelSelection::LevelSelection(Level *level) : m_Level(level) {
 
   for (int i = 0; i < 16; ++i) {
-
-    Color color = WHITE;
-
-    if (!m_Activated[i]) {
-      color = GRAY;
-    }
-
     if (i == 0) {
       m_Offset.y = 120;
     } else if (i % 4 == 0) {
@@ -134,7 +127,7 @@ LevelSelection::LevelSelection(Level *level) : m_Level(level) {
     m_Offset.x += 250;
 
     m_Menu.push_back({{280 + m_Offset.x, m_Offset.y, 100, 100},
-                      BLUE,
+                      WHITE,
                       i,
                       std::to_string(i + 1)});
   }
@@ -174,8 +167,8 @@ void LevelSelection::handle_input() {
       // If the left mouse button is pressed, handle action based on selected
       // box.
       if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-	this->m_Level->m_Id = box.m_Id + 1;
-	mouse_pressed = true;
+        this->m_Level->m_Id = box.m_Id + 1;
+        mouse_pressed = true;
       }
     }
     // Reset the menu-box color to white if it is not currently selected.

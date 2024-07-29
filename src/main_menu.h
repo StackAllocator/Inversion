@@ -75,6 +75,6 @@ private:
   Level *m_Level;
 
   // Color m_BoxColor;
-  std::array<bool, 16> m_Activated{0};
+  // std::array<bool, 16> m_Activated;
 };
 } // namespace Inversion

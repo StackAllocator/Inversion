@@ -111,13 +111,13 @@ void Player::draw() {
     case EmotionStates::SAD:
       DrawTexturePro(
           AssetManager::get_texture("sad"), {0, 0, 64, 64},
-          {m_Player.x - 10, m_Player.y - 8 + m_Player.height, 64, 64}, {0, 0},
+          {m_Player.x + 50, m_Player.y + m_Player.height + 10, 64, 64}, {0, 0},
           180, WHITE);
       break;
     case EmotionStates::FEAR:
       DrawTexturePro(
           AssetManager::get_texture("fear"), {0, 0, 64, 64},
-          {m_Player.x - 10, m_Player.y - 8 + m_Player.height, 64, 64}, {0, 0},
+          {m_Player.x + 50, m_Player.y + m_Player.height + 10, 64, 64}, {0, 0},
           180, WHITE);
       break;
     default:
@@ -136,7 +136,6 @@ void Player::move() {
   bool want_flip = IsKeyPressed(KEY_G);
 
   int direction = 0;
-  m_Velocity.x = direction * m_Speed;
 
   // Figure out direction and use it as a movement scalar.
   if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) {
@@ -144,6 +143,16 @@ void Player::move() {
   }
   if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) {
     direction -= 1;
+  }
+
+  if (m_Player.x <= -m_Player.width || m_Player.x >= 1920 || m_Player.y < 0 ||
+      m_Player.y >= 1080) {
+    m_Player.x = m_Start_Pos.x;
+    m_Player.y = m_Start_Pos.y;
+    m_Flipped = false;
+    m_Velocity.x = m_Velocity.y = 0;
+    // Make gravity positive when resetting the player.
+    m_Gravity = std::abs(m_Gravity);
   }
 
   switch (m_MovementState) {
@@ -154,11 +163,11 @@ void Player::move() {
     // Player wants to jump.
     if (want_jump) {
       m_MovementState = ActorStates::JUMP_START;
-      m_Velocity.y = m_jumpAcceleration;
+      m_Velocity.y = m_Flipped ? -m_jumpAcceleration : m_jumpAcceleration;
     }
 
     // Make the player flip
-    if (want_flip) {
+    if (want_flip && m_MovementState == ActorStates::IDLE) {
       m_Flipped = !m_Flipped;
       m_Gravity = -m_Gravity;
     }
@@ -166,9 +175,8 @@ void Player::move() {
     // Player wants to run.
     else if (direction != 0) {
       m_MovementState = ActorStates::RUN;
-    }
-    // Player is just standing.
-    else {
+      m_Velocity.x = direction * m_Speed; // Set horizontal velocity
+    } else {
       m_Velocity.x = 0;
     }
     break;
@@ -177,26 +185,24 @@ void Player::move() {
     // Player pressed Space and wants to jump.
     if (want_jump) {
       m_MovementState = ActorStates::JUMP_START;
-      m_Velocity.y = m_jumpAcceleration;
+      m_Velocity.y = m_Flipped ? -m_jumpAcceleration : m_jumpAcceleration;
       m_Velocity.x *= m_jumpVelocityDampen;
     }
     // Player stops running and wants to stand around again.
     else if (direction == 0) {
       m_MovementState = ActorStates::IDLE;
+      m_Velocity.x = 0; // Stop horizontal movement
     }
     // Player is running.
     else {
-      m_Velocity.x = direction * m_Speed;
+      m_Velocity.x = direction * m_Speed; // Update horizontal velocity
     }
     break;
 
   case ActorStates::JUMP_START:
     PlaySound(AssetManager::get_sound("jump"));
-    if (m_Velocity.y <= 0) {
-      m_MovementState = ActorStates::JUMP_UP;
-    } else {
-      m_MovementState = ActorStates::FALL;
-    }
+    m_MovementState =
+        m_Velocity.y <= 0 ? ActorStates::JUMP_UP : ActorStates::FALL;
     break;
 
   case ActorStates::JUMP_UP:

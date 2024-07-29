@@ -69,7 +69,7 @@
         {
          "columns":26,
          "firstgid":1,
-         "image":"..\/Tiles-and-Enemies.png",
+         "image":"..\/Sprites/Tiles-and-Enemies.png",
          "imageheight":152,
          "imagewidth":208,
          "margin":0,

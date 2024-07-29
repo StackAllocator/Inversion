@@ -8,6 +8,7 @@
 // Author: Johannes Elsing <je305@students.uni-freiburg.de>
 
 #include "raylib.h"
+#include <cassert>
 #include <iostream>
 #include <unordered_map>
 
@@ -30,7 +31,9 @@ void load_textures() {
 
   auto load_texture = [=](std::string base_path,
                           std::string file) -> Texture2D {
-    return LoadTexture((base_path + file).c_str());
+    Texture2D texture = LoadTexture((base_path + file).c_str());
+    assert(texture.id != 0);
+    return texture;
   };
 
   std::string sprite_path = "./Assets/Sprites/";
@@ -46,7 +49,7 @@ void load_textures() {
   textures["armor"] = load_texture(sprite_path, "Armorstand.png");
   textures["flag"] = load_texture(sprite_path, "flag.png");
 
-  textures["tileset"] = LoadTexture("./Assets/Tiles-and-Enemies.png");
+  textures["tileset"] = LoadTexture("./Assets/Sprites/Tiles-and-Enemies.png");
 }
 // ----------------------------------------------------------------------------------------------------
 
