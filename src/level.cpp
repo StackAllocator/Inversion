@@ -7,12 +7,13 @@
 // Copyright (C) 2024
 // Author: Johannes Elsing <je305@students.uni-freiburg.de>
 
-#include <cmath>
+// STL
 #include <fstream>
 #include <iostream>
-#include <map>
-#include <string>
 #include <vector>
+#include <map>
+#include <cmath>
+#include <string>
 
 #include "json.hpp"
 #include "raylib.h"
@@ -39,9 +40,11 @@ json load_map(std::string path) {
 void load_and_extract(const std::string &path, Inversion::TileMapping &level) {
   json level_data = load_map(path);
 
+  // Extract tile info from provided level data.
   float tile_width = static_cast<float>(level_data["tilewidth"]);
   float tile_height = static_cast<float>(level_data["tileheight"]);
 
+  // Tilemap and actual screen dimensions differ by a factor of 4.
   float screen_tile_width = 4 * tile_width;
   float screen_tile_height = 4 * tile_height;
 
@@ -50,13 +53,14 @@ void load_and_extract(const std::string &path, Inversion::TileMapping &level) {
   const unsigned FLIPPED_VERTICALLY_FLAG = 0x40000000;
   const unsigned FLIPPED_DIAGONALLY_FLAG = 0x20000000;
 
+  // Compute the width of the tileset.
   int tilesetwidth =
       static_cast<int>(level_data["tilesets"][0]["imagewidth"]) / tile_width;
 
   int width = level_data["layers"][0]["width"];
   int height = level_data["layers"][0]["height"];
 
-  // Ensure level.coords and level.rects are clear before populating
+  // Ensure level.coords and level.rects are cleared before populating.
   level.coords.clear();
   level.rects.clear();
 

@@ -32,6 +32,7 @@ void load_textures() {
   auto load_texture = [=](std::string base_path,
                           std::string file) -> Texture2D {
     Texture2D texture = LoadTexture((base_path + file).c_str());
+    // Assertion checks if texture has been loaded correctly.
     assert(texture.id != 0);
     return texture;
   };
