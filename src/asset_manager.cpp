@@ -7,10 +7,11 @@
 // Copyright (C) 2024
 // Author: Johannes Elsing <je305@students.uni-freiburg.de>
 
-#include "raylib.h"
 #include <cassert>
-#include <iostream>
+#include <string>
 #include <unordered_map>
+
+#include "raylib.h"
 
 #include "./asset_manager.h"
 

@@ -97,7 +97,7 @@ void cleanup() {
   // De-Initialization
   // ----------------------------------------------------------------------------------------------------
   AssetManager::unload_textures(); // Unload loaded data (textures)
-  AssetManager::unload_sounds();   // Unload loaded data (sounds)
+  AssetManager::unload_sounds();   // Unload loaded data (sounds, music)
   AssetManager::unload_fonts();    // Unload loaded data (fonts)
   AssetManager::unload_music();    // Unload loaded data (music)
 

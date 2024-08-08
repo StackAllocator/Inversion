@@ -72,15 +72,24 @@ void Game::update_game() {
     main_menu.handle_input();
     main_menu.update_balls();
 
+    // Proceed with the game.
     if (main_menu.m_ShouldResume) {
       main_menu.m_ShouldResume = false;
       m_GameState = GameState::GAME;
-    } else if (main_menu.m_ShouldLevelSelect) {
+    }
+
+    // Move in the level selection state.
+    else if (main_menu.m_ShouldLevelSelect) {
       m_GameState = GameState::LEVEL_SELECTION;
-    } else if (main_menu.m_ShouldQuit) {
+    }
+
+    // Quit the application if the user signals it.
+    else if (main_menu.m_ShouldQuit) {
       m_Quit = true;
     }
     break;
+
+  // ----------------------------------------------------------------------------------------------------
   case GameState::LEVEL_SELECTION:
     level_selection.handle_input();
     if (level_selection.mouse_pressed) {
@@ -102,6 +111,7 @@ void Game::draw_game() {
   // ----------------------------------------------------------------------------------------------------
   // Draw the title screen.
   case GameState::TITLE:
+
     DrawTextEx(AssetManager::get_font("dejavu"), "INVERSION", {220, 400}, 270,
                20, WHITE);
     DrawTextEx(AssetManager::get_font("dejavu"), "PRESS ANY BUTTON",

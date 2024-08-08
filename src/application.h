@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "raylib.h"
 #include <string>
+#include "raylib.h"
 
 #include "./game.h"
 
@@ -19,8 +19,10 @@ namespace Inversion::Application {
 // Handles the entire application.
 // Run the entire application.
 
+// Initialization of the application.
 void init();
 
+// Run the game until the player signals an interrupt.
 void run();
 
 // This function is for cleanup. Closes window and OpenGL context.

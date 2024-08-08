@@ -46,11 +46,14 @@ void load_sounds();
 Sound get_sound(std::string sound_name);
 
 // ----------------------------------------------------------------------------------------------------
-// Unload sounds.
+// Unload all sounds.
 void unload_sounds();
+
 // ----------------------------------------------------------------------------------------------------
+// Retrieve music by unique identifier.
 Music get_music(std::string music_name);
 
 // ----------------------------------------------------------------------------------------------------
+// Unload music.
 void unload_music();
 } // namespace Inversion::AssetManager

@@ -128,6 +128,7 @@ namespace Inversion {
 Level::Level() {
   load_and_extract("./Assets/JSON/level_1.tmj", level_1);
   load_and_extract("./Assets/JSON/level_2.tmj", level_2);
+  load_and_extract("./Assets/JSON/level_3.tmj", level_3);
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -156,21 +157,49 @@ void draw(TileMapping level, Texture2D tileset, Rectangle flag_pos,
 // ----------------------------------------------------------------------------------------------------
 void Level::draw_level() {
   if (m_Id == 1) {
-
     draw(level_1, tileset, {1800, 380, 64, 64}, false);
-
   } else if (m_Id == 2) {
-
     draw(level_2, tileset, {1740, 320, 64, 64}, true);
-
-    for (auto &obstacle : level_2.collision_rects) {
-      DrawRectangleRec(obstacle, WHITE);
-    }
-
   } else if (m_Id == 3) {
-
-    DrawTexturePro(Inversion::AssetManager::get_texture("flag"), {0, 0, 16, 16},
-                   {1700, 532, 64, 64}, {0, 0}, 0, WHITE);
+    draw(level_3, tileset, {1740, 320, 64, 64}, true);
+  } else if (m_Id == 4) {
+    draw(level_4, tileset, {1800, 380, 64, 64}, false);
+  }
+  else if (m_Id == 5) {
+    draw(level_5, tileset, {1740, 320, 64, 64}, true);
+  }
+  else if (m_Id == 6) {
+    draw(level_6, tileset, {1740, 320, 64, 64}, true);
+  }
+  else if (m_Id == 7) {
+    draw(level_7, tileset, {1740, 320, 64, 64}, true);
+  }
+  else if (m_Id == 8) {
+    draw(level_8, tileset, {1740, 320, 64, 64}, true);
+  }
+  else if (m_Id == 9) {
+    draw(level_9, tileset, {1740, 320, 64, 64}, true);
+  }
+  else if (m_Id == 10) {
+    draw(level_10, tileset, {1740, 320, 64, 64}, true);
+  }
+  else if (m_Id == 11) {
+    draw(level_11, tileset, {1740, 320, 64, 64}, true);
+  }
+  else if (m_Id == 12) {
+    draw(level_12, tileset, {1740, 320, 64, 64}, true);
+  }
+  else if (m_Id == 13) {
+    draw(level_13, tileset, {1740, 320, 64, 64}, true);
+  }
+  else if (m_Id == 14) {
+    draw(level_14, tileset, {1740, 320, 64, 64}, true);
+  }
+  else if (m_Id == 15) {
+    draw(level_15, tileset, {1740, 320, 64, 64}, true);
+  }
+  else if (m_Id == 16) {
+    draw(level_16, tileset, {1740, 320, 64, 64}, true);
   }
 }
 } // namespace Inversion

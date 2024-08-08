@@ -54,9 +54,8 @@ private:
   Color m_Color;
   Vector2 m_Start_Pos;
 
+  // Checks if player is flipped.
   bool m_Flipped = false;
-
-  int color_count = 0;
 
   // Start with an idle animation.
   ActorStates m_MovementState = ActorStates::IDLE;
@@ -64,16 +63,20 @@ private:
   // Defines the player velocity.
   float m_Speed = 200.f;
 
+  // Define the gravity for the player.
   float m_Gravity = 300.f;
 
   bool hitSide = false;
   bool hitBottom = false;
   bool hitTop = false;
 
+  // Accelerate player when jumping.
   float m_jumpAcceleration = -450;
 
+  // Damping factor for jump.
   float m_jumpVelocityDampen = 1.125f;
 
+  // Horizontal / vertical velocity.
   Vector2 m_Velocity = {0, 0};
 
   // Define the player acceleration.

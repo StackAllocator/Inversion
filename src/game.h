@@ -32,10 +32,9 @@ public:
   // ----------------------------------------------------------------------------------------------------
   // Run the game.
   void update_game();
+
   // Draw the main game loop.
   void draw_game();
-
-  void handle_input();
 
   // Used to signal when the application should terminate and clean itself up.
   bool m_Quit = false;
