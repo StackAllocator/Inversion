@@ -2,7 +2,7 @@
 .PRECIOUS: %.o
 .PHONY: all compile checkstyle test clean format
 
-CXX = clang++ -Wall -Wextra -Wdeprecated -std=c++17 -fsanitize=address
+CXX = clang++ -Wall -std=c++17 -fsanitize=address
 INCLUDE_DIR = ./deps/include/
 LIB_DIR = ./deps/lib/linux/
 LIBS = -L$(LIB_DIR) -lraylib

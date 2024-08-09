@@ -52,6 +52,8 @@ void load_textures() {
   textures["flag"] = load_texture(sprite_path, "flag.png");
 
   textures["tileset"] = LoadTexture("./Assets/Sprites/Tiles-and-Enemies.png");
+  textures["forest_tileset"] = LoadTexture("./Assets/Sprites/Grassland/CharacterSheet.png");
+  // CharacterSheet.png  Decor.png  DirtBackgroundTiles.png  DirtTiles.png  EnemySheet.png  GrassTiles.png  SpikeTiles.png
 }
 // ----------------------------------------------------------------------------------------------------
 

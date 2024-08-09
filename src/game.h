@@ -51,8 +51,5 @@ private:
   LevelSelection level_selection;
   Player m_Player;
   Level m_Level;
-
-  FRIEND_TEST(GameTest, init_game);
-  FRIEND_TEST(GameTest, update_game);
 };
 } // namespace Inversion

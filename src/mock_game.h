@@ -75,4 +75,11 @@ private:
   Player m_player;
   MockMainMenu m_MockMainMenu;
 };
+
+class MockPlayer {
+public:
+  void move();
+private:
+  void handle_collision();
+};
 } // namespace Inversion

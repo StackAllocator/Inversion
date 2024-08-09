@@ -64,14 +64,6 @@ void load_and_extract(const std::string &path, Inversion::TileMapping &level) {
   level.coords.clear();
   level.rects.clear();
 
-  auto rect_coordinates = level_data["coordinates"];
-
-  // Initialize collision recs to use 'fake' rects for collision.
-  for (const auto &coord : rect_coordinates) {
-    level.collision_rects.push_back(
-        {coord["x"], coord["y"], coord["w"], coord["h"]});
-  }
-
   for (int row = 0; row < height; ++row) {
     for (int col = 0; col < width; ++col) {
       int index = row * width + col;
@@ -119,6 +111,20 @@ void load_and_extract(const std::string &path, Inversion::TileMapping &level) {
       level.width.push_back(curr_tile_width);
       level.height.push_back(curr_tile_height);
       level.rotation.push_back(rotation);
+
+      if (i == 146 || i == 1610613175 || i == 2684354706 || i == 133 || i == 490) {
+
+	if (flipped_diagonally) {
+	  dest_y -= screen_tile_height;
+	}
+	if (flipped_horizontally) {
+	  dest_x -= screen_tile_width;
+	}
+	else if (flipped_vertically) {
+	  dest_x -= screen_tile_height;
+	}
+	level.collision_rects.push_back({dest_x, dest_y, screen_tile_width, screen_tile_height});
+      }
     }
   }
 }
@@ -129,6 +135,7 @@ Level::Level() {
   load_and_extract("./Assets/JSON/level_1.tmj", level_1);
   load_and_extract("./Assets/JSON/level_2.tmj", level_2);
   load_and_extract("./Assets/JSON/level_3.tmj", level_3);
+  load_and_extract("./Assets/JSON/level_4.tmj", level_4);
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -146,6 +153,10 @@ void draw(TileMapping level, Texture2D tileset, Rectangle flag_pos,
          level.rects[i].height},
         {0, 0}, level.rotation[i], WHITE);
   }
+  for (auto &rect : level.collision_rects) {
+    DrawRectangleRec(rect, RED);
+  }
+
   int rotation = 0;
   if (flipped) {
     rotation += 180;

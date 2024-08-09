@@ -8,6 +8,7 @@
 // Author: Johannes Elsing <je305@students.uni-freiburg.de>
 
 #include "raylib.h"
+#include "raymath.h"
 #include <iostream>
 #include <memory>
 
@@ -161,7 +162,7 @@ void Player::move() {
     m_EmotionState = EmotionStates::HAPPY;
 
     // Player wants to jump.
-    if (want_jump) {
+    if (want_jump && m_Velocity.y == 0) {
       m_MovementState = ActorStates::JUMP_START;
       m_Velocity.y = m_Flipped ? -m_jumpAcceleration : m_jumpAcceleration;
     }
@@ -239,6 +240,7 @@ void Player::move() {
     }
     break;
   case 2:
+    m_Start_Pos = {100, 100};
     handle_collision(m_Level->level_2.collision_rects, new_pos);
     if (m_Player.x >= 1690 && m_Player.x <= 1710 && m_Player.y >= 450 &&
         m_Player.y <= 470) {

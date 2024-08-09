@@ -14,6 +14,7 @@
 #include <array>
 #include <memory>
 #include <vector>
+#include <gtest/gtest.h>
 
 #include "./level.h"
 
@@ -45,6 +46,7 @@ public:
 private:
   // Handles collision between the player and the environment.
   void handle_collision(std::vector<Rectangle> &level, Vector2 &new_pos);
+  FRIEND_TEST(PlayerTest, handle_collision);
 
   // Make the player happy initially.
   EmotionStates m_EmotionState = EmotionStates::HAPPY;
