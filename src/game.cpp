@@ -33,7 +33,7 @@ void Game::init_game() {
 
   // Set player and level properties.
   m_Player.set_rect({200, 820}, {40, 140});
-  m_Level.m_Id = 1;
+  m_Level.set_level(1);
   m_Level.set_texture();
 }
 
@@ -91,6 +91,13 @@ void Game::update_game() {
 
   // ----------------------------------------------------------------------------------------------------
   case GameState::LEVEL_SELECTION:
+
+    // Go back to menu if ESCAPE key has been pressed.
+    if (IsKeyPressed(KEY_ESCAPE)) {
+      m_GameState = GameState::MENU;
+      main_menu.m_ShouldLevelSelect = false;
+    }
+
     level_selection.handle_input();
     if (level_selection.mouse_pressed) {
       level_selection.mouse_pressed = false;

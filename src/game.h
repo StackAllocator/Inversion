@@ -50,6 +50,6 @@ private:
   MainMenu main_menu;
   LevelSelection level_selection;
   Player m_Player;
-  Level m_Level;
+  LevelManager m_Level;
 };
 } // namespace Inversion

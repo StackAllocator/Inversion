@@ -28,7 +28,7 @@ enum class EmotionStates { HAPPY, SAD, FEAR };
 // Class that manages a player object. It handles movement and display.
 class Player {
 public:
-  explicit Player(Level *level);
+  explicit Player(LevelManager *level);
   ~Player() = default;
 
   // Draw the player on the screen.
@@ -45,7 +45,7 @@ public:
 
 private:
   // Handles collision between the player and the environment.
-  void handle_collision(std::vector<Rectangle> &level, Vector2 &new_pos);
+  void handle_collision(std::vector<Rectangle> &level, Vector2 &new_pos, bool &on_ground);
   FRIEND_TEST(PlayerTest, handle_collision);
 
   // Make the player happy initially.
@@ -85,6 +85,6 @@ private:
   float m_Acceleration = 0.f;
 
   // Stores level info such that the player can collide with surroundings.
-  Level *m_Level;
+  LevelManager *m_Level;
 };
 } // namespace Inversion

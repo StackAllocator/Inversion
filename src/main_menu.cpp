@@ -114,7 +114,7 @@ void MainMenu::update_balls() {
 
 // ----------------------------------------------------------------------------------------------------
 // Class that handles the level selection menu.
-LevelSelection::LevelSelection(Level *level) : m_Level(level) {
+LevelSelection::LevelSelection(LevelManager *level) : m_Level(level) {
 
   for (int i = 0; i < 16; ++i) {
     if (i == 0) {
@@ -167,7 +167,8 @@ void LevelSelection::handle_input() {
       // If the left mouse button is pressed, handle action based on selected
       // box.
       if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        this->m_Level->m_Id = box.m_Id + 1;
+        m_Level->m_Id = box.m_Id + 1;
+	m_Level->current_level = m_Level->levels[m_Level->m_Id - 1];
         mouse_pressed = true;
       }
     }

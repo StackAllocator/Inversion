@@ -19,7 +19,7 @@
 namespace Inversion {
 
 // ----------------------------------------------------------------------------------------------------
-Player::Player(Level *level) : m_Color(WHITE), m_Level(level) {}
+Player::Player(LevelManager *level) : m_Color(WHITE), m_Level(level) {}
 
 // ----------------------------------------------------------------------------------------------------
 void Player::set_rect(Vector2 position, Vector2 size) {
@@ -36,42 +36,48 @@ void Player::set_rect(Vector2 position, Vector2 size) {
 }
 
 // ----------------------------------------------------------------------------------------------------
-void Player::handle_collision(std::vector<Rectangle> &level, Vector2 &new_pos) {
-  bool on_ground = false;
+void Player::handle_collision(std::vector<Rectangle> &level, Vector2 &new_pos, bool &on_ground) {
 
-  // Iterate over every obstacle in the level and check for collision.
-  for (const Rectangle &obstacle : level) {
-    if (CheckCollisionRecs(
-            {new_pos.x, new_pos.y, m_Player.width, m_Player.height},
-            obstacle)) {
-      // Handle collision from the top
-      if (!m_Flipped && m_Player.y < obstacle.y &&
-          new_pos.y + m_Player.height > obstacle.y) {
-        m_Velocity.y = 0;
-        new_pos.y = obstacle.y - m_Player.height;
-        on_ground = true;
-      }
-      // Handle collision from the bottom when flipped
-      else if (m_Flipped && m_Player.y > obstacle.y &&
-               new_pos.y < obstacle.y + obstacle.height) {
-        m_Velocity.y = 0;
-        new_pos.y = obstacle.y + obstacle.height;
-        on_ground = true;
-      }
-      // Handle collision from the sides
-      else if (new_pos.x + m_Player.width > obstacle.x &&
-               m_Player.x < obstacle.x) {
-        new_pos.x = obstacle.x - m_Player.width;
-      } else if (new_pos.x < obstacle.x + obstacle.width &&
-                 m_Player.x > obstacle.x) {
-        new_pos.x = obstacle.x + obstacle.width;
-      }
+    for (const Rectangle &obstacle : level) {
+        if (new_pos.x + m_Player.width > obstacle.x &&
+            new_pos.x < obstacle.x + obstacle.width &&
+            new_pos.y + m_Player.height > obstacle.y &&
+            new_pos.y < obstacle.y + obstacle.height) {
+
+            float delta_x = (new_pos.x + m_Player.width / 2) - (obstacle.x + obstacle.width / 2);
+            float delta_y = (new_pos.y + m_Player.height / 2) - (obstacle.y + obstacle.height / 2);
+
+            float intersect_x = abs(delta_x) - (m_Player.width / 2 + obstacle.width / 2);
+            float intersect_y = abs(delta_y) - (m_Player.height / 2 + obstacle.height / 2);
+
+            if (intersect_x < 0.0f && intersect_y < 0.0f) {
+                if (intersect_y > intersect_x) {
+                    // Vertical collision resolution
+                    if (delta_y > 0.0f) {
+                        // Collision on the bottom (normal gravity) or top (flipped gravity)
+                        new_pos.y = obstacle.y + obstacle.height;
+                        m_Velocity.y = 0;
+			if (m_Flipped) on_ground = true;
+                    } else {
+                        // Collision on the top (normal gravity) or bottom (flipped gravity)
+                        new_pos.y = obstacle.y - m_Player.height;
+                        m_Velocity.y = 0;
+			if (!m_Flipped) on_ground = true;
+                    }
+                } else {
+                    // Horizontal collision resolution
+                    if (delta_x > 0.0f) {
+                        // Collision on the left
+                        new_pos.x = obstacle.x + obstacle.width;
+                    } else {
+                        // Collision on the right
+                        new_pos.x = obstacle.x - m_Player.width;
+                    }
+                    m_Velocity.x = 0;
+                }
+            }
+        }
     }
-  }
-
-  if (on_ground) {
-    m_MovementState = ActorStates::IDLE;
-  }
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -130,130 +136,102 @@ void Player::draw() {
 
 // ----------------------------------------------------------------------------------------------------
 void Player::move() {
-  // Compute the delta once.
-  float delta = GetFrameTime();
+    float delta = GetFrameTime();
 
-  bool want_jump = IsKeyDown(KEY_SPACE);
-  bool want_flip = IsKeyPressed(KEY_G);
+    bool want_jump = IsKeyDown(KEY_SPACE);
+    bool want_flip = IsKeyPressed(KEY_G);
+    int direction = 0;
 
-  int direction = 0;
-
-  // Figure out direction and use it as a movement scalar.
-  if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) {
-    direction += 1;
-  }
-  if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) {
-    direction -= 1;
-  }
-
-  if (m_Player.x <= -m_Player.width || m_Player.x >= 1920 || m_Player.y < 0 ||
-      m_Player.y >= 1080) {
-    m_Player.x = m_Start_Pos.x;
-    m_Player.y = m_Start_Pos.y;
-    m_Flipped = false;
-    m_Velocity.x = m_Velocity.y = 0;
-    // Make gravity positive when resetting the player.
-    m_Gravity = std::abs(m_Gravity);
-  }
-
-  switch (m_MovementState) {
-  case ActorStates::IDLE:
-    // Set the player to be happy on idle.
-    m_EmotionState = EmotionStates::HAPPY;
-
-    // Player wants to jump.
-    if (want_jump && m_Velocity.y == 0) {
-      m_MovementState = ActorStates::JUMP_START;
-      m_Velocity.y = m_Flipped ? -m_jumpAcceleration : m_jumpAcceleration;
+    if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) {
+        direction += 1;
+    }
+    if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) {
+        direction -= 1;
     }
 
-    // Make the player flip
+    // Reset position if out of bounds
+    if (m_Player.x <= -m_Player.width || m_Player.x >= 1920 || m_Player.y < 0 || m_Player.y >= 1080) {
+        m_Player.x = m_Start_Pos.x;
+        m_Player.y = m_Start_Pos.y;
+        m_Flipped = false;
+        m_Velocity.x = m_Velocity.y = 0;
+        m_Gravity = std::abs(m_Gravity);
+    }
+
+    // Gravity flipping
     if (want_flip && m_MovementState == ActorStates::IDLE) {
-      m_Flipped = !m_Flipped;
-      m_Gravity = -m_Gravity;
+        m_Flipped = !m_Flipped;
+        m_Gravity = -m_Gravity;
+	m_Velocity.x = 0;
     }
 
-    // Player wants to run.
-    else if (direction != 0) {
-      m_MovementState = ActorStates::RUN;
-      m_Velocity.x = direction * m_Speed; // Set horizontal velocity
-    } else {
-      m_Velocity.x = 0;
-    }
-    break;
+    // Movement state management
+    switch (m_MovementState) {
+        case ActorStates::IDLE:
+            m_EmotionState = EmotionStates::HAPPY;
 
-  case ActorStates::RUN:
-    // Player pressed Space and wants to jump.
-    if (want_jump) {
-      m_MovementState = ActorStates::JUMP_START;
-      m_Velocity.y = m_Flipped ? -m_jumpAcceleration : m_jumpAcceleration;
-      m_Velocity.x *= m_jumpVelocityDampen;
-    }
-    // Player stops running and wants to stand around again.
-    else if (direction == 0) {
-      m_MovementState = ActorStates::IDLE;
-      m_Velocity.x = 0; // Stop horizontal movement
-    }
-    // Player is running.
-    else {
-      m_Velocity.x = direction * m_Speed; // Update horizontal velocity
-    }
-    break;
+            if (want_jump && m_Velocity.y == 0) {
+                m_MovementState = ActorStates::JUMP_START;
+                m_Velocity.y = m_Flipped ? -m_jumpAcceleration : m_jumpAcceleration;
+            } else if (direction != 0) {
+                m_MovementState = ActorStates::RUN;
+                m_Velocity.x = direction * m_Speed;
+            } else {
+                m_Velocity.x = 0;
+            }
+            break;
 
-  case ActorStates::JUMP_START:
-    PlaySound(AssetManager::get_sound("jump"));
-    m_MovementState =
-        m_Velocity.y <= 0 ? ActorStates::JUMP_UP : ActorStates::FALL;
-    break;
+        case ActorStates::RUN:
+            if (want_jump) {
+                m_MovementState = ActorStates::JUMP_START;
+                m_Velocity.y = m_Flipped ? -m_jumpAcceleration : m_jumpAcceleration;
+                m_Velocity.x *= m_jumpVelocityDampen;
+            } else if (direction == 0) {
+                m_MovementState = ActorStates::IDLE;
+                m_Velocity.x = 0;
+            } else {
+                m_Velocity.x = direction * m_Speed;
+            }
+            break;
 
-  case ActorStates::JUMP_UP:
-    m_Velocity.y += 400 * delta;
-    if (m_Velocity.y >= 0) {
+        case ActorStates::JUMP_START:
+            PlaySound(AssetManager::get_sound("jump"));
+            m_MovementState = (m_Velocity.y <= 0) ? ActorStates::JUMP_UP : ActorStates::FALL;
+            break;
+
+        case ActorStates::JUMP_UP:
+            m_Velocity.y += (m_Flipped ? -400 : 400) * delta;
+            if (m_Velocity.y >= 0) {
+                m_MovementState = ActorStates::FALL;
+            }
+            break;
+
+        case ActorStates::FALL:
+            m_EmotionState = EmotionStates::FEAR;
+            m_Velocity.y += m_Gravity * delta;
+            break;
+    }
+
+    m_Velocity.y += m_Gravity * delta;
+
+    Vector2 new_pos = {m_Player.x + m_Velocity.x * delta,
+                       m_Player.y + m_Velocity.y * delta};
+
+    bool on_ground = false;
+    // Handle collision based on level.
+    handle_collision(m_Level->current_level.collision_rects, new_pos, on_ground);
+
+    if (on_ground) {
+      if (m_MovementState == ActorStates::FALL || m_MovementState == ActorStates::JUMP_UP) {
+	m_MovementState = ActorStates::IDLE;
+      }
+    }
+    else if (m_MovementState == ActorStates::IDLE) {
       m_MovementState = ActorStates::FALL;
     }
-    break;
 
-  case ActorStates::FALL:
-    m_EmotionState = EmotionStates::FEAR;
-    m_Velocity.y += (m_Flipped ? -500 : 500) * m_jumpVelocityDampen * delta;
-    break;
-  }
-
-  // Apply gravity.
-  m_Velocity.y += m_Gravity * delta;
-
-  // Calculate the new position.
-  Vector2 new_pos = {m_Player.x + m_Velocity.x * delta,
-                     m_Player.y + m_Velocity.y * delta};
-
-  // Handle collision based on level.
-  switch (m_Level->m_Id) {
-  case 1:
-    handle_collision(m_Level->level_1.collision_rects, new_pos);
-    if (m_Player.x >= 1790 && m_Player.x <= 1810 && m_Player.y >= 370 &&
-        m_Player.y <= 390) {
-      // Level transition (example case).
-      m_Level->m_Id++;
-      m_Player.x = m_Start_Pos.x;
-      m_Player.y = m_Start_Pos.y;
-      PlaySound(AssetManager::get_sound("win"));
-    }
-    break;
-  case 2:
-    m_Start_Pos = {100, 100};
-    handle_collision(m_Level->level_2.collision_rects, new_pos);
-    if (m_Player.x >= 1690 && m_Player.x <= 1710 && m_Player.y >= 450 &&
-        m_Player.y <= 470) {
-      m_Level->m_Id++;
-      m_Player.x = m_Start_Pos.x;
-      m_Player.y = m_Start_Pos.y;
-      PlaySound(AssetManager::get_sound("win"));
-    }
-    break;
-  }
-
-  // Update player's position.
-  m_Player.x = new_pos.x;
-  m_Player.y = new_pos.y;
+    // Update player's position
+    m_Player.x = new_pos.x;
+    m_Player.y = new_pos.y;
 }
 } // namespace Inversion

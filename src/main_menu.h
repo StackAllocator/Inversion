@@ -61,7 +61,7 @@ private:
 // Class that handles the level selection menu.
 class LevelSelection : public Menu {
 public:
-  LevelSelection(Level *level);
+  LevelSelection(LevelManager *level);
 
   void draw_menu() override;
   void handle_input() override;
@@ -72,7 +72,7 @@ private:
   // Defines offset for the menu boxes.
   Vector2 m_Offset = {0, 0};
 
-  Level *m_Level;
+  LevelManager *m_Level;
 
   // Color m_BoxColor;
   // std::array<bool, 16> m_Activated;

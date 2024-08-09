@@ -10,6 +10,9 @@
 #pragma once
 #include "raylib.h"
 #include <vector>
+#include <string>
+#include <unordered_set>
+#include <map>
 
 namespace Inversion {
 // ----------------------------------------------------------------------------------------------------
@@ -24,38 +27,24 @@ struct TileMapping {
   std::vector<int> gids;
 };
 
-struct Level {
-  Level();
-  // Store texture as member so it doesn't get reloaded more than once.
-  void set_texture();
-  Level(Level &other) = default;
-  Level &operator=(Level &other) = default;
-  ~Level() = default;
-  // Draw the current level with parsed JSON data.
+class LevelManager {
+public:
+  LevelManager();
+  ~LevelManager();
+
+  void load_and_extract(int level_id, const std::string& path);
   void draw_level();
 
-  // Set the level id to 1 initially to start with the first level.
-  int m_Id = 1;
+  void set_texture();
+  void set_level(int level_id);
 
-  // Definitions of the levels.
-  TileMapping level_1;
-  TileMapping level_2;
-  TileMapping level_3;
-  TileMapping level_4;
-  TileMapping level_5;
-  TileMapping level_6;
-  TileMapping level_7;
-  TileMapping level_8;
-  TileMapping level_9;
-  TileMapping level_10;
-  TileMapping level_11;
-  TileMapping level_12;
-  TileMapping level_13;
-  TileMapping level_14;
-  TileMapping level_15;
-  TileMapping level_16;
+  int m_Id;
+  TileMapping current_level;
+  std::map<int, TileMapping> levels;
+  std::unordered_set<int> collision_tiles;
 
-  // Store the tileset and extract source rects based on ids.
+private:
   Texture2D tileset;
+  Vector2 flag_position;
 };
 } // namespace Inversion
