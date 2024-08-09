@@ -1,14 +1,12 @@
 #include "raylib.h"
 
 namespace Inversion::Particles {
+void init(Vector2 position);
 
 // ----------------------------------------------------------------------------------------------------
-// Particle structure definition.
-struct Particle {
-  Vector2 position;
-  Vector2 velocity;
-  float radius;
-  bool shrinking;
-  Color color;
-};
+void update();
+
+// ----------------------------------------------------------------------------------------------------
+
+void draw();
 } // namespace Inversion::Particles
