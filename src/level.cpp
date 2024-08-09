@@ -44,8 +44,7 @@ LevelManager::LevelManager() {
 LevelManager::~LevelManager() {}
 
 void LevelManager::set_texture() {
-  this->tileset_1 = Inversion::AssetManager::get_texture("tileset_1");
-  this->tileset_2 = Inversion::AssetManager::get_texture("tileset_2");
+  this->tileset_1 = Inversion::AssetManager::get_texture("tileset");
 }
 
 void LevelManager::load_and_extract(int level_id, const std::string &path) {

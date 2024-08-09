@@ -46,7 +46,6 @@ public:
   int m_Id;
 
 private:
-  Texture2D tileset_1;
-  Texture2D tileset_2;
+  Texture2D tileset;
 };
 } // namespace Inversion

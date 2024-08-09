@@ -51,8 +51,7 @@ void load_textures() {
   textures["armor"] = load_texture(sprite_path, "Armorstand.png");
   textures["flag"] = load_texture(sprite_path, "flag.png");
 
-  textures["tileset_1"] = LoadTexture("./Assets/Sprites/Tiles-and-Enemies.png");
-  textures["tileset_2"] = LoadTexture("./Assets/Sprites/tileset.png");
+  textures["tileset"] = LoadTexture("./Assets/Sprites/Tiles-and-Enemies.png");
 }
 // ----------------------------------------------------------------------------------------------------
 
