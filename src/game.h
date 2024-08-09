@@ -49,7 +49,7 @@ private:
   // Create instances of the classes to merge game logic together.
   MainMenu main_menu;
   LevelSelection level_selection;
-  Player m_Player;
   LevelManager m_Level;
+  Player m_Player;
 };
 } // namespace Inversion

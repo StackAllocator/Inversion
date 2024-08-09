@@ -17,7 +17,7 @@
 namespace Inversion {
 
 // ----------------------------------------------------------------------------------------------------
-// Inject the dependencies into the object. [Dependency injection]
+// Inject the dependencies into the object.
 Game::Game() : level_selection(&m_Level), m_Player(&m_Level) {}
 
 // ----------------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ void Game::init_game() {
 
   // Set player and level properties.
   m_Player.set_rect({200, 820}, {40, 140});
-  m_Level.set_level(1);
+  m_Level.set_level(0);
   m_Level.set_texture();
 }
 
@@ -119,11 +119,12 @@ void Game::draw_game() {
   // Draw the title screen.
   case GameState::TITLE:
 
-    DrawTextEx(AssetManager::get_font("dejavu"), "INVERSION", {220, 400}, 270,
+    // Draw text with custom font.
+    DrawTextEx(AssetManager::get_font("dejavu"), "INVERSION", {220, 300}, 200,
                20, WHITE);
     DrawTextEx(AssetManager::get_font("dejavu"), "PRESS ANY BUTTON",
                {800, 1000}, 30, 5, WHITE);
-    DrawText("by Johannes Elsing", 1500, 720, 20, WHITE);
+    DrawText("by Johannes Elsing", 1170, 500, 20, WHITE);
     break;
   // ----------------------------------------------------------------------------------------------------
   // Draw the game main menu.

@@ -71,7 +71,7 @@ private:
   FRIEND_TEST(gameTest, MockGame);
 
   GameState m_GameState;
-  Level m_Level;
+  LevelManager m_Level;
   Player m_player;
   MockMainMenu m_MockMainMenu;
 };
@@ -79,6 +79,7 @@ private:
 class MockPlayer {
 public:
   void move();
+
 private:
   void handle_collision();
 };

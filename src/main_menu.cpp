@@ -168,7 +168,7 @@ void LevelSelection::handle_input() {
       // box.
       if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         m_Level->m_Id = box.m_Id + 1;
-	m_Level->current_level = m_Level->levels[m_Level->m_Id - 1];
+        m_Level->current_level = m_Level->levels[m_Level->m_Id - 1];
         mouse_pressed = true;
       }
     }

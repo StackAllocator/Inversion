@@ -9,10 +9,10 @@
 
 #pragma once
 #include "raylib.h"
-#include <vector>
+#include <map>
 #include <string>
 #include <unordered_set>
-#include <map>
+#include <vector>
 
 namespace Inversion {
 // ----------------------------------------------------------------------------------------------------
@@ -35,15 +35,15 @@ public:
   LevelManager();
   ~LevelManager();
 
-  void load_and_extract(int level_id, const std::string& path);
+  void load_and_extract(int level_id, const std::string &path);
   void draw_level();
 
   void set_texture();
   void set_level(int level_id);
 
-  int m_Id;
   TileMapping current_level;
   std::map<int, TileMapping> levels;
+  int m_Id;
 
 private:
   Texture2D tileset_1;

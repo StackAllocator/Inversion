@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include <string>
 #include "raylib.h"
+#include <string>
 
 #include "./game.h"
 
@@ -25,7 +25,7 @@ void init();
 // Run the game until the player signals an interrupt.
 void run();
 
-// This function is for cleanup. Closes window and OpenGL context.
+// Close window and OpenGL context.
 void cleanup();
 
 // Code of the loop function is executed every frame.
