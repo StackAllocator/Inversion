@@ -25,6 +25,9 @@ struct TileMapping {
   std::vector<float> width;
   std::vector<float> height;
   std::vector<int> gids;
+
+  bool flag_flipped;
+  Rectangle flag_coords;
 };
 
 class LevelManager {
@@ -41,10 +44,9 @@ public:
   int m_Id;
   TileMapping current_level;
   std::map<int, TileMapping> levels;
-  std::unordered_set<int> collision_tiles;
 
 private:
-  Texture2D tileset;
-  Vector2 flag_position;
+  Texture2D tileset_1;
+  Texture2D tileset_2;
 };
 } // namespace Inversion

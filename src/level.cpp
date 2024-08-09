@@ -14,6 +14,7 @@
 #include <map>
 #include <cmath>
 #include <string>
+#include <algorithm>
 
 #include "json.hpp"
 #include "raylib.h"
@@ -25,18 +26,22 @@ using json = nlohmann::json;
 
 namespace Inversion {
 
+static std::vector<int> collision_tiles = {390};
+
 LevelManager::LevelManager() {
   for (int i = 0; i < 3; ++i) {
     load_and_extract(i, "./Assets/JSON/level_" + std::to_string(i + 1) + ".tmj");
   }
-  // current_level = levels.at(0);
-  // collision_tiles.insert({146, 133, 490, 230, 256, 282, 308, 230});
+  current_level = levels.at(0);
+  // Sort to be able to perform efficient binary search in O(log(n))
+  std::sort(collision_tiles.begin(), collision_tiles.end());
 }
 
 LevelManager::~LevelManager() {}
 
 void LevelManager::set_texture() {
-  this->tileset = Inversion::AssetManager::get_texture("tileset");
+  this->tileset_1 = Inversion::AssetManager::get_texture("tileset_1");
+  this->tileset_2 = Inversion::AssetManager::get_texture("tileset_2");
 }
 
 void LevelManager::load_and_extract(int level_id, const std::string& path) {
@@ -58,8 +63,8 @@ void LevelManager::load_and_extract(int level_id, const std::string& path) {
     int width = static_cast<int>(level_data["layers"][0]["width"]);
     int height = static_cast<int>(level_data["layers"][0]["height"]);
 
-    for (int row = 0; row < height; ++row) {
-        for (int col = 0; col < width; ++col) {
+    for (auto row = 0; row < height; ++row) {
+        for (auto col = 0; col < width; ++col) {
             int index = row * width + col;
             unsigned gid = level_data["layers"][0]["data"][index];
 
@@ -101,11 +106,21 @@ void LevelManager::load_and_extract(int level_id, const std::string& path) {
             level.height.push_back(curr_tile_height);
             level.rotation.push_back(rotation);
 
-	    if (auto search = collision_tiles.find(i); search != collision_tiles.end()) {
+	    if (flipped_diagonally) {
+	      dest_x -= screen_tile_width;
+	    }
+
+	    if (i == 146 || i == 257 || i == 283 || i == (2684354707 & 0x0ffffffff) - 1) {
+	      level.collision_rects.push_back({dest_x, dest_y, screen_tile_width, screen_tile_height});
+	    }
+
+	    if (std::binary_search(collision_tiles.begin(), collision_tiles.end(), i)) {
 	      level.collision_rects.push_back({dest_x, dest_y, screen_tile_width, screen_tile_height});
 	    }
         }
     }
+    level.flag_coords = {};
+    level.flag_flipped = false;
     levels[level_id] = level;
 }
 
@@ -117,13 +132,17 @@ void LevelManager::draw_level() {
 
   for (size_t i = 0; i < current_level.coords.size(); ++i) {
     DrawTexturePro(
-		   tileset,
+		   tileset_1,
 		   {current_level.coords[i].x, current_level.coords[i].y, current_level.width[i], current_level.height[i]},
 		   {current_level.rects[i].x, current_level.rects[i].y, current_level.rects[i].width, current_level.rects[i].height},
 		   {0, 0}, current_level.rotation[i], WHITE);
   }
 
+
+  for (auto &rec : current_level.collision_rects) {
+    DrawRectangleRec(rec, RED);
+  }
   // DrawTexturePro(Inversion::AssetManager::get_texture("flag"), {0, 0, 16, 16},
-  //	 {flag_position.x, flag_position.y, 64, 64}, {0, 0}, 0, WHITE);
+  // 	 {flag_position.x, flag_position.y, 64, 64}, {0, 0}, 0, WHITE);
 }
 } // namespace Inversion
