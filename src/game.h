@@ -19,7 +19,7 @@
 namespace Inversion {
 
 // Define the three major game states.
-enum class GameState { TITLE, MENU, LEVEL_SELECTION, GAME };
+enum class GameState { TITLE, MENU, LEVEL_SELECTION, GAME, END };
 
 // ----------------------------------------------------------------------------------------------------
 // Class that handles the execution of the game. Title/Menu/Game

@@ -35,8 +35,10 @@ public:
   void update_balls();
 
   // ----------------------------------------------------------------------------------------------------
+  // Indicate if the game can be resumed from the current level.
   bool m_ShouldResume = false;
   // ----------------------------------------------------------------------------------------------------
+  // Indicate if a level should be selected.
   bool m_ShouldLevelSelect = false;
   // Used to signal to the game that it should quit.
   bool m_ShouldQuit = false;
@@ -66,15 +68,13 @@ public:
   void draw_menu() override;
   void handle_input() override;
 
+  // Game class has to know if mouse is pressed. Provide it as a public
+  // interface.
   bool mouse_pressed = false;
 
 private:
   // Defines offset for the menu boxes.
   Vector2 m_Offset = {0, 0};
-
   LevelManager *m_Level;
-
-  // Color m_BoxColor;
-  // std::array<bool, 16> m_Activated;
 };
 } // namespace Inversion

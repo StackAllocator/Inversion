@@ -15,6 +15,17 @@ namespace Inversion {
 TEST(gameTest, MockMainMenu) {
   MockMainMenu mock_menu;
 
+  // Validate the constructor
+  // invokation of the MockMainMenu class.
+
+  ASSERT_EQ(mock_menu.m_Menu[0].m_Id, 1);
+  ASSERT_EQ(mock_menu.m_Menu[1].m_Id, 2);
+  ASSERT_EQ(mock_menu.m_Menu[2].m_Id, 3);
+
+  ASSERT_EQ(mock_menu.m_Menu[0].m_Text, "FIRST");
+  ASSERT_EQ(mock_menu.m_Menu[1].m_Text, "SECOND");
+  ASSERT_EQ(mock_menu.m_Menu[2].m_Text, "THIRD");
+
   ASSERT_FLOAT_EQ(mock_menu.ball_speed, 500);
   mock_menu.ball_speed = 1;
 
@@ -43,6 +54,47 @@ TEST(gameTest, MockMainMenu) {
 
   ASSERT_FLOAT_EQ(mock_menu.first_ball.y, 10);
   //-----------------------------------------//
+
+  mock_menu.current_mouse_pos.x = 0;
+  mock_menu.current_mouse_pos.y = 0;
+
+  // No action should be taken by default.
+  ASSERT_EQ(mock_menu.m_ShouldResume, false);
+  ASSERT_EQ(mock_menu.m_ShouldQuit, false);
+  ASSERT_EQ(mock_menu.m_ShouldLevelSelect, false);
+
+  mock_menu.handle_input();
+
+  // No action should be taken with current mouse position.
+  ASSERT_EQ(mock_menu.m_ShouldResume, false);
+  ASSERT_EQ(mock_menu.m_ShouldQuit, false);
+  ASSERT_EQ(mock_menu.m_ShouldLevelSelect, false);
+
+  // Set mouse in first box.
+  mock_menu.current_mouse_pos.x = 25;
+  mock_menu.current_mouse_pos.y = 45;
+
+  mock_menu.handle_input();
+
+  // The mouse position is in place but the mouse is not pressed yet.
+  ASSERT_EQ(mock_menu.m_ShouldResume, false);
+
+  mock_menu.mouse_pressed = true;
+
+  mock_menu.handle_input();
+
+  // Now the mouse hovers over the box and is pressed.
+  ASSERT_EQ(mock_menu.m_ShouldResume, true);
+
+  // Move mouse on level selection box.
+  mock_menu.current_mouse_pos.y = 75;
+  mock_menu.handle_input();
+  ASSERT_EQ(mock_menu.m_ShouldLevelSelect, true);
+
+  // Move mouse on quit box.
+  mock_menu.current_mouse_pos.y = 95;
+  mock_menu.handle_input();
+  ASSERT_EQ(mock_menu.m_ShouldQuit, true);
 }
 
 TEST(gameTest, MockGame) {
@@ -55,24 +107,24 @@ TEST(gameTest, MockGame) {
 
   // Update the game based on current game state.
   mock_game.update_game();
-  //------------------------------------------------//
+  //---------------------------------------------------//
   ASSERT_EQ(mock_game.ESCAPE_PRESSED, false);
   ASSERT_EQ(mock_game.m_GameState, MockGameState::TITLE);
-  //------------------------------------------------//
+  //---------------------------------------------------//
 
   mock_game.ESCAPE_PRESSED = true;
   mock_game.update_game();
-  // ------------------------------------------------//
+  // ---------------------------------------------------//
   ASSERT_EQ(mock_game.ESCAPE_PRESSED, true);
   ASSERT_EQ(mock_game.m_GameState, MockGameState::MENU);
-  //------------------------------------------------//
+  //----------------------------------------------------//
 
   mock_game.ESCAPE_PRESSED = false;
   mock_game.update_game();
-  //------------------------------------------------//
+  //---------------------------------------------------//
   ASSERT_EQ(mock_game.ESCAPE_PRESSED, false);
   ASSERT_EQ(mock_game.m_GameState, MockGameState::MENU);
-  //------------------------------------------------//
+  //---------------------------------------------------//
 
   mock_game.m_GameState = MockGameState::TITLE;
   mock_game.ANY_KEY_PRESSED = false;
@@ -85,9 +137,9 @@ TEST(gameTest, MockGame) {
   //--------------------------------------------------//
   mock_game.ANY_KEY_PRESSED = true;
   mock_game.update_game();
-  // --------------------------------------------------
+  //---------------------------------------------------//
   ASSERT_EQ(mock_game.m_GameState, MockGameState::GAME);
-  //--------------------------------------------------//
+  //---------------------------------------------------//
 }
 
 TEST(PlayerTest, player_test) {
@@ -134,5 +186,12 @@ TEST(LevelTest, level_test) {
   ASSERT_EQ(level_manager.m_Id, 0);
   level_manager.set_level(10);
   ASSERT_EQ(level_manager.m_Id, 10);
+}
+
+TEST(gameTest, MockLevelSelection) {
+  MockLevelSelection mock_level_selection;
+  ASSERT_EQ(mock_level_selection.mouse_pressed, false);
+  mock_level_selection.current_mouse_pos.x = 0;
+  mock_level_selection.current_mouse_pos.y = 0;
 }
 } // namespace Inversion

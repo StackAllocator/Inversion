@@ -40,6 +40,7 @@ void Player::handle_collision(std::vector<Rectangle> &level, Vector2 &new_pos,
                               bool &on_ground) {
 
   for (const Rectangle &obstacle : level) {
+
     if (new_pos.x + m_Player.width > obstacle.x &&
         new_pos.x < obstacle.x + obstacle.width &&
         new_pos.y + m_Player.height > obstacle.y &&
@@ -50,6 +51,7 @@ void Player::handle_collision(std::vector<Rectangle> &level, Vector2 &new_pos,
       float delta_y = (new_pos.y + m_Player.height / 2) -
                       (obstacle.y + obstacle.height / 2);
 
+      // Compute the intersection spots.
       float intersect_x =
           abs(delta_x) - (m_Player.width / 2 + obstacle.width / 2);
       float intersect_y =
@@ -110,7 +112,9 @@ void Player::draw() {
       throw std::runtime_error("Emotion state invalid!\n");
       break;
     }
-  } else {
+  }
+  // Flip the sprites and adjust the positions.
+  else {
     DrawTexturePro(
         AssetManager::get_texture("armor"), {0, 0, 390, 590},
         {m_Player.x + 55, m_Player.y + m_Player.height - 30, 78, 118}, {0, 0},
@@ -142,12 +146,13 @@ void Player::draw() {
 }
 
 void Player::set_position(Vector2 position) {
-  m_Player.x = position.x;
-  m_Player.y = position.y;
+  m_Player.x = m_Start_Pos.x = position.x;
+  m_Player.y = m_Start_Pos.y = position.y;
 }
 
 // ----------------------------------------------------------------------------------------------------
 void Player::move() {
+
   float delta = GetFrameTime();
 
   bool want_jump = IsKeyDown(KEY_SPACE);
@@ -246,11 +251,11 @@ void Player::move() {
   if (m_Player.x >= 1770 && m_Player.x <= 1790 && m_Player.y >= 300 &&
       m_Player.y <= 320) {
     // Reset player to start.
-    new_pos.x = m_Start_Pos.x;
-    new_pos.y = m_Start_Pos.y;
+    new_pos.x = m_Player.x = m_Start_Pos.x;
+    new_pos.y = m_Player.y = m_Start_Pos.y;
 
-    if (m_Level->m_Id >= 15) {
-      m_Level->m_Id = 0;
+    if (m_Level->m_Id == 15) {
+      m_Level->finished = true;
     } else {
       m_Level->m_Id++;
     }
@@ -259,14 +264,18 @@ void Player::move() {
   }
 
   if (on_ground) {
+    // Reset player to idle state if grounded.
     if (m_MovementState == ActorStates::FALL ||
         m_MovementState == ActorStates::JUMP_UP) {
       m_MovementState = ActorStates::IDLE;
     }
-  } else if (m_MovementState == ActorStates::IDLE) {
+  }
+  // Not on ground -> make us fall.
+  else if (m_MovementState == ActorStates::IDLE) {
     m_MovementState = ActorStates::FALL;
   }
 
+  // Update the player position by the newly computed position.
   m_Player.x = new_pos.x;
   m_Player.y = new_pos.y;
 }

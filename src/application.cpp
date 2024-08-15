@@ -85,7 +85,6 @@ void OnRender() {
   // ----------------------------------------------------------------------------------------------------
   // Draw
   BeginDrawing();
-  ClearBackground(BLACK);
 
   game.draw_game();
 

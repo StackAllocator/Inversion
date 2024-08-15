@@ -52,6 +52,14 @@ void load_textures() {
   textures["flag"] = load_texture(sprite_path, "flag.png");
 
   textures["tileset"] = LoadTexture("./Assets/Sprites/Tiles-and-Enemies.png");
+
+  textures["firework_1"] = LoadTexture("./Assets/Sprites/yellow/1.png");
+  textures["firework_2"] = LoadTexture("./Assets/Sprites/yellow/2.png");
+  textures["firework_3"] = LoadTexture("./Assets/Sprites/yellow/3.png");
+  textures["firework_4"] = LoadTexture("./Assets/Sprites/yellow/4.png");
+  textures["firework_5"] = LoadTexture("./Assets/Sprites/yellow/5.png");
+  textures["firework_6"] = LoadTexture("./Assets/Sprites/yellow/6.png");
+  textures["firework_7"] = LoadTexture("./Assets/Sprites/yellow/7.png");
 }
 // ----------------------------------------------------------------------------------------------------
 

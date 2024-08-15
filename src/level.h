@@ -41,9 +41,12 @@ public:
   void set_texture();
   void set_level(int level_id);
 
+  // These variables provide a public interface because they
+  // have to be acessed from third-party locations.
   TileMapping current_level;
   std::map<int, TileMapping> levels;
   int m_Id;
+  bool finished = false;
 
 private:
   Texture2D tileset;

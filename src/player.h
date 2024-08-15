@@ -17,6 +17,7 @@
 #include <vector>
 
 #include "./level.h"
+#include "./main_menu.h"
 
 namespace Inversion {
 

@@ -8,7 +8,6 @@
 // Author: Johannes Elsing <je305@students.uni-freiburg.de>
 
 // STL
-#include <algorithm>
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -26,8 +25,6 @@ using json = nlohmann::json;
 
 namespace Inversion {
 
-static std::vector<int> collision_tiles = {390, 146, 257, 282};
-
 LevelManager::LevelManager() {
   // Load and extract all levels.
   for (int i = 0; i < 16; ++i) {
@@ -37,8 +34,6 @@ LevelManager::LevelManager() {
   // Set the current level to the first level.
   m_Id = 0;
   current_level = levels.at(m_Id);
-  // Sort to be able to perform efficient binary search in O(log(n))
-  std::sort(collision_tiles.begin(), collision_tiles.end());
 }
 
 LevelManager::~LevelManager() {}
@@ -59,23 +54,28 @@ void LevelManager::load_and_extract(int level_id, const std::string &path) {
   int tile_width = level_data["tilewidth"];
   int tile_height = level_data["tileheight"];
 
+  // TileMap and screen have a 1:4 ratio.
   float screen_tile_width = 4 * tile_width;
   float screen_tile_height = 4 * tile_height;
 
   int tileset_width =
       static_cast<int>(level_data["tilesets"][0]["imagewidth"]) / tile_width;
+
   int width = static_cast<int>(level_data["layers"][0]["width"]);
   int height = static_cast<int>(level_data["layers"][0]["height"]);
 
   for (auto row = 0; row < height; ++row) {
     for (auto col = 0; col < width; ++col) {
+
       int index = row * width + col;
+
+      // Retrieve the global tile id from the JSON file.
       unsigned gid = level_data["layers"][0]["data"][index];
 
       // Extract the global ID and adjust for Tiled's 1-based indexing.
       unsigned i = (gid & 0x0fffffff) - 1;
 
-      // Compute (x, y) position.
+      // Compute (x, y) position in world space.
       float x = (i % tileset_width) * tile_width;
       float y = (i / tileset_width) * tile_height;
 
@@ -97,6 +97,7 @@ void LevelManager::load_and_extract(int level_id, const std::string &path) {
         curr_tile_height *= -1;
 
       float rotation = 0.f;
+
       if (flipped_diagonally) {
         rotation = 90.f;
         curr_tile_width *= -1;
@@ -115,26 +116,29 @@ void LevelManager::load_and_extract(int level_id, const std::string &path) {
         dest_x -= screen_tile_width;
       }
 
-      if (i == 15 || i == 41 || i == 55 || i == 66 || i == 68 || i == 132 ||
-          i == 131 || i == 146 || i == 144 || i == 159 || i == 257 ||
-          i == 283 || i == 133 || i == 417 || i == 418 || i == 392 ||
-          i == 391 || i == 247 || i == 274 || i == 223) {
-        level.collision_rects.push_back(
-            {dest_x, dest_y, screen_tile_width, screen_tile_height});
-      }
-
       /*
-      if (std::binary_search(collision_tiles.begin(), collision_tiles.end(),
-                             i)) {
+       * TODO:
+       * Instead of checking individual tiles that are hard-coded,
+       * I should use an object-layer for collisions and check against that.
+       * I also shouldn't store collision rects in a vector but rather
+       * compute the player collisions based on the position at runtime.
+       */
+      if (i == 15 || i == 41 || i == 55 || i == 66 || i == 68 || i == 132 ||
+          i == 131 || i == 148 || i == 146 || i == 144 || i == 159 ||
+          i == 257 || i == 84 || i == 70 || i == 283 || i == 133 || i == 417 ||
+          i == 418 || i == 392 || i == 391 || i == 247 || i == 274 ||
+          i == 223) {
         level.collision_rects.push_back(
             {dest_x, dest_y, screen_tile_width, screen_tile_height});
       }
-      */
     }
   }
 
+  // Always set the flag to the same coords.
   level.flag_coords = {1780, 380};
   level.flag_flipped = false;
+
+  // Assign the level-map a key-value pair [level_id -> level].
   levels[level_id] = level;
 }
 
@@ -156,9 +160,6 @@ void LevelManager::draw_level() {
                    {0, 0}, current_level.rotation[i], WHITE);
   }
 
-  // for (auto &rec : current_level.collision_rects) {
-  // DrawRectangleRec(rec, RED);
-  // }
   DrawTexturePro(
       Inversion::AssetManager::get_texture("flag"), {0, 0, 16, 16},
       {current_level.flag_coords.x, current_level.flag_coords.y, 64, 64},

@@ -9,12 +9,10 @@
 
 #include "./application.h"
 
-int main() {
+auto main() -> int {
 
   Inversion::Application::init();
   Inversion::Application::run();
 
   Inversion::Application::cleanup();
-
-  return 0;
 }

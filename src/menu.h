@@ -20,16 +20,19 @@ namespace Inversion {
 // Draw and store state about the rectangles in the game menu.
 class Menu {
 public:
+  // Pure virtual functions for implementation that is required.
   virtual void draw_menu() = 0;
   virtual void handle_input() = 0;
 
-protected:
+private:
   struct MenuRectangle {
     Rectangle m_Rect;
     Color m_Color;      // Store the color of the rectangle.
     int m_Id;           // Store unique id of rectangle
     std::string m_Text; // Specify a message for the rectangle.
   };
+
+protected:
   std::vector<MenuRectangle> m_Menu;
 };
 } // namespace Inversion

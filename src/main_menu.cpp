@@ -167,8 +167,8 @@ void LevelSelection::handle_input() {
       // If the left mouse button is pressed, handle action based on selected
       // box.
       if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        m_Level->m_Id = box.m_Id + 1;
-        m_Level->current_level = m_Level->levels[m_Level->m_Id - 1];
+        m_Level->m_Id = box.m_Id;
+        m_Level->current_level = m_Level->levels[m_Level->m_Id];
         mouse_pressed = true;
       }
     }

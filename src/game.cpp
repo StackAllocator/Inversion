@@ -16,8 +16,12 @@
 
 namespace Inversion {
 
+static int frames_counter = 0;
+// Forward declaration for firework.
+static void draw_fireworks();
+
 // ----------------------------------------------------------------------------------------------------
-// Inject the dependencies into the object.
+// Inject the dependencies into the object. [Dependency injection]
 Game::Game() : level_selection(&m_Level), m_Player(&m_Level) {}
 
 // ----------------------------------------------------------------------------------------------------
@@ -64,6 +68,9 @@ void Game::update_game() {
       m_GameState = GameState::MENU;
     }
     m_Player.move();
+    if (m_Level.finished) {
+      m_GameState = GameState::END;
+    }
     break;
   // ----------------------------------------------------------------------------------------------------
   case GameState::MENU:
@@ -106,6 +113,12 @@ void Game::update_game() {
       m_GameState = GameState::GAME;
     }
     break;
+  // ----------------------------------------------------------------------------------------------------
+  case GameState::END:
+    if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_Q)) {
+      m_Quit = true;
+    }
+    break;
   }
   // ----------------------------------------------------------------------------------------------------
 }
@@ -121,6 +134,7 @@ void Game::draw_game() {
   case GameState::TITLE:
 
     // Draw text with custom font.
+    ClearBackground(BLACK);
     DrawTextEx(AssetManager::get_font("dejavu"), "INVERSION", {220, 300}, 200,
                20, WHITE);
     DrawTextEx(AssetManager::get_font("dejavu"), "PRESS ANY BUTTON",
@@ -130,18 +144,54 @@ void Game::draw_game() {
   // ----------------------------------------------------------------------------------------------------
   // Draw the game main menu.
   case GameState::MENU:
+    ClearBackground(BLACK);
     main_menu.draw_menu();
     main_menu.draw_balls();
     break;
   case GameState::LEVEL_SELECTION:
+    ClearBackground(BLACK);
     level_selection.draw_menu();
     break;
   // ----------------------------------------------------------------------------------------------------
   // Draw the current level and player.
   case GameState::GAME:
+    ClearBackground(BLACK);
     m_Level.draw_level();
     m_Player.draw();
     break;
+  // ----------------------------------------------------------------------------------------------------
+  case GameState::END:
+    ClearBackground(BLUE);
+    draw_fireworks();
+    DrawText("The end. Thanks for playing!", 690, 500, 40, BLACK);
+    break;
   }
+}
+
+// Draw fireworks for the end screen.
+void draw_fireworks() {
+  if (frames_counter < 10) {
+    DrawTexture(AssetManager::get_texture("firework_1"), 600, 200, WHITE);
+    DrawTexture(AssetManager::get_texture("firework_1"), 1100, 200, WHITE);
+  } else if (frames_counter < 20 && frames_counter <= 30) {
+    DrawTexture(AssetManager::get_texture("firework_2"), 600, 200, WHITE);
+    DrawTexture(AssetManager::get_texture("firework_2"), 1100, 200, WHITE);
+  } else if (frames_counter < 30 && frames_counter <= 40) {
+    DrawTexture(AssetManager::get_texture("firework_3"), 600, 200, WHITE);
+    DrawTexture(AssetManager::get_texture("firework_3"), 1100, 200, WHITE);
+  } else if (frames_counter < 40 && frames_counter <= 50) {
+    DrawTexture(AssetManager::get_texture("firework_4"), 600, 200, WHITE);
+    DrawTexture(AssetManager::get_texture("firework_4"), 1100, 200, WHITE);
+  } else if (frames_counter < 50 && frames_counter <= 60) {
+    DrawTexture(AssetManager::get_texture("firework_5"), 600, 200, WHITE);
+    DrawTexture(AssetManager::get_texture("firework_5"), 1100, 200, WHITE);
+  } else if (frames_counter < 60 && frames_counter <= 70) {
+    DrawTexture(AssetManager::get_texture("firework_6"), 600, 200, WHITE);
+    DrawTexture(AssetManager::get_texture("firework_6"), 1100, 200, WHITE);
+  }
+  frames_counter++;
+  // Reset frame counter to see animation periodically
+  if (frames_counter > 100)
+    frames_counter = 0;
 }
 } // namespace Inversion

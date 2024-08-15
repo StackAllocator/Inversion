@@ -7,7 +7,6 @@
 // Copyright (C) 2024
 // Author: Johannes Elsing <je305@students.uni-freiburg.de>
 
-#include <algorithm>
 #include <array>
 #include <iostream>
 
@@ -16,12 +15,13 @@
 
 namespace Inversion {
 // ----------------------------------------------------------------------------------------------------
-MockMainMenu::MockMainMenu() {
-
+MockMainMenu::MockMainMenu()
+  : mouse_pressed(false)
+{
   // Add selectable menu items for the menu.
-  m_Menu.push_back({{200, 400, 265, 100}, WHITE, 1, "RESUME"});
-  m_Menu.push_back({{200, 550, 500, 100}, WHITE, 2, "SELECT LEVEL"});
-  m_Menu.push_back({{200, 700, 160, 100}, WHITE, 3, "EXIT"});
+  m_Menu.push_back({{20, 40, 10, 10}, WHITE, 1, "FIRST"});
+  m_Menu.push_back({{20, 70, 10, 10}, WHITE, 2, "SECOND"});
+  m_Menu.push_back({{20, 90, 10, 10}, WHITE, 3, "THIRD"});
 
   // Set ball positions and properties.
   first_ball = {1200, 540};
@@ -53,7 +53,7 @@ void MockMainMenu::handle_input() {
 
       // If the left mouse button is pressed, handle action based on selected
       // box.
-      if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+      if (mouse_pressed) {
         switch (menu.m_Id) {
         case 1:
           m_ShouldResume = true;
@@ -75,14 +75,8 @@ void MockMainMenu::handle_input() {
 }
 
 // ----------------------------------------------------------------------------------------------------
-void MockMainMenu::draw_balls() {
-  // Connect the balls with a bezier curve.
-  DrawLineBezier(first_ball, second_ball, 2.f, WHITE);
-
-  DrawCircleV(first_ball, radius, RED);
-  DrawCircleV(second_ball, radius, BLUE);
-  DrawCircleV(third_ball, radius - 15, GREEN);
-}
+// Empty impl. for mock.
+void MockMainMenu::draw_balls() {}
 
 // ----------------------------------------------------------------------------------------------------
 void MockMainMenu::update_balls() {
@@ -109,13 +103,16 @@ MockLevelSelection::MockLevelSelection() {
   for (int i = 0; i < 16; ++i) {
     if (i == 0) {
       m_Offset.y = 120;
-    } else if (i % 4 == 0) {
+    }
+    // After fox boxes have been initialized in a row, move to the next lane.
+    else if (i % 4 == 0) {
       m_Offset.y += 250;
-      m_Offset.x = 0;
+      m_Offset.x = 0; // Reset offset to start value.
     }
 
     m_Offset.x += 250;
 
+    // Provide menu the appropriate box properties.
     m_Menu.push_back({{280 + m_Offset.x, m_Offset.y, 100, 100},
                       WHITE,
                       i,
@@ -140,9 +137,6 @@ void MockLevelSelection::handle_input() {
       box.m_Color = GRAY;
       // If the left mouse button is pressed, handle action based on selected
       // box.
-      if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        mouse_pressed = true;
-      }
     }
     // Reset the menu-box color to white if it is not currently selected.
     else {
